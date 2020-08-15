@@ -4,14 +4,14 @@ const rows = 40
 const cols = 40
 
 //create 1D arrays
-let currGen = [rows]
-let nextGen = [rows]
+let currGen = [rows];
+let nextGen = [rows];
 
 //create 2D array
 function createGenArrays () {
     for (let i = 0; i < rows; i++) {
-        currGen[i] = newArray(cols)
-        nextGen[i] = newArray(cols)
+        currGen[i] = new Array(cols)
+        nextGen[i] = new Array(cols)
     }
 }
 
@@ -79,41 +79,55 @@ function cellClick() {
 //Current row and column will never be less than 0.
 function getNeighbourCount(row, col) {
     let count = 0
-    let nrow =Number(row)
+    let nrow = Number(row)
     let ncol = Number(col)
 
     //Ensure we are not on the first row
     if (nrow - 1 >= 0) {
     // Check top neighbour
-    if (currGen[nrow - 1][ncol] == 1)
+        if (currGen[nrow - 1][ncol] == 1)
         count++    
     }
 
     //Ensure not in the first cell
     if (nrow - 1 >= 0 && ncol - 1 >= 0) {
     // Check upper left neighbour
-    if (currGen[nrow - 1][ncol - 1] == 1)
+        if (currGen[nrow - 1][ncol - 1] == 1)
         count++
     }
 
     //Ensure not on first col
     if (ncol - 1 >= 0) {
     //Check left neighbour
-    if (currGen[nrow][ncol + 1] == 1)
+        if (currGen[nrow][ncol - 1] == 1)
+        count++
+    }
+
+    //Ensure not on last col
+    if (ncol + 1 < cols) {
+    //Check right neighbour
+        if (currGen[nrow][ncol + 1] == 1)
         count++
     }
 
     //Ensure not on bottom left corner
     if (nrow + 1 < rows && ncol - 1 >= 0) {
     //Check bottom left neighbour
-    if (currGen[nrow + 1][ncol - 1] == 1)
+        if (currGen[nrow + 1][ncol - 1] == 1)
+        count++
+    }
+
+    //Ensure not on bottom right
+    if (nrow + 1 < rows && ncol + 1 < cols) {
+    //Check bottom right neighbour
+        if (currGen[nrow + 1][ncol + 1] == 1)
         count++
     }
 
     //Ensure not on last row
     if (nrow + 1 < rows) {
     //Check bottom neighbour
-    if (currGen[nrow + 1[ncol] == 1])
+        if (currGen[nrow + 1[ncol] == 1])
     count++
     }
     return count
@@ -134,7 +148,7 @@ function createNextGen() {
                     nextGen[row][col] = 0 //... cell has less than 2 neighbours, it dies.
                 } else if (neighbours == 2 || neighbours == 3) {
                     nextGen[row][col] = 1 //... cell has 2 or 3 neighbours, it lives.
-                } else if (neighbour > 3) {
+                } else if (neighbours > 3) {
                     nextGen[row][col] = 0 //... cell has more than 3 neighbours, it dies.
                 }
             //If cell is DEAD, aka 0, birth a new cell
@@ -151,9 +165,12 @@ function createNextGen() {
 //Update the currGen with result of createNextGen
 //Set nextGen to 0
 function updateCurrGen() {
+
     for (row in currGen) {
-        currGen[row][col] = nextGen[row][col]
-        nextGen[row][col] = 0
+        for (col in currGen[row]) {
+            currGen[row][col] = nextGen[row][col]
+            nextGen[row][col] = 0
+        }
     }
 }
 
@@ -172,14 +189,16 @@ function updateWorld() {
     }
 }
 
-
-
-
-
 window.onload=()=>{
     createWorld() //The visual table of a 2D array
     createGenArrays() //current and next gen
     initGenArrays() //Set all array cells to 0 or dead
+}
+
+function evolve() {
+    createNextGen()
+    updateCurrGen()
+    updateWorld()
 }
 
 //draw this out
