@@ -15,7 +15,6 @@ function createGenArrays () {
     }
 }
 
-
 //Initially, all cell values are 0 or dead. 1 will be alive. 
 function initGenArrays() {
     for (let i = 0; i < rows; i++) {
@@ -29,13 +28,13 @@ function initGenArrays() {
  //create a board using a 2D array of rows and cols.
 function createWorld() {
 
-    //querySelector returns the first element in the document, and matches the specified selector or group of selectors. If no match, null is returned.
+    //Return first el and match the specified selector(s). No match = null
     let world = document.querySelector('#world')
 
-    //createElement(tagNameIsString[, options]) creates the HTML element specified by tagName or an HTMLUnknownElement if not recognised.
+    //(tagNameIsString[, options]) create el by tagName, which is a string.
     let tbl = document.createElement('table')
     
-    //.setAttribute(name, value) sets the value of an attribute. If it exists, value updated. New - added with name and value.
+    //(name, value) set val of an attr. If it exists, value updated. New - added.
     tbl.setAttribute('id', 'worldgrid')
     
 for (let i = 0; i < rows; i++) {
@@ -43,16 +42,16 @@ for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             let cell = document.createElement('td')
 
-            //This allows us to keep track of each cell, using 'i_j'. The upper left corner is 0_0
+            //Keep track of each cell, using 'i_j'. The upper left corner is 0_0
             cell.setAttribute('id', i + '_' + j)
 
-            //This adds a class of 'dead' to each cell. It can be changed to 'alive'. 
+            //Add a class of 'dead' to each cell. It can be changed to 'alive'. 
             cell.setAttribute('class', 'dead')
             
-            //This initiates the game via an eventListener
+            //Initiate the game via an eventListener
             cell.addEventListener('click', cellClick)
 
-            //appendChild appends a node as the last child of a node
+            //Append a node as the last child of a node
             tr.appendChild(cell)
         }
         tbl.appendChild(tr)
@@ -62,8 +61,8 @@ for (let i = 0; i < rows; i++) {
 
 function cellClick() {
     let loc = this.id.split("_")
-    let row = Number(loc[0]) //Retrieves i
-    let col = Number(loc[1]) //Retrieves j
+    let row = Number(loc[0]) //Retrieve i
+    let col = Number(loc[1]) //Retrieve j
 
     //Toggles cell alive or dead
     if (this.className ==='alive') {
@@ -75,6 +74,80 @@ function cellClick() {
     }
 }
 
+
+//Ensure we are never looking out of bounds, aka, a negative number as a cell position.
+//Current row and column will never be less than 0.
+function getNeighbourCount(row, col) {
+    let count = 0
+    let nrow =Number(row)
+    let ncol = Number(col)
+
+    //Ensure we are not on the first row
+    if (nrow - 1 >= 0) {
+    // Check top neighbour
+    if (currGen[nrow - 1][ncol] == 1)
+        count++    
+    }
+
+    //Ensure not in the first cell
+    if (nrow - 1 >= 0 && ncol - 1 >= 0) {
+    // Check upper left neighbour
+    if (currGen[nrow - 1][ncol - 1] == 1)
+        count++
+    }
+
+    //Ensure not on first col
+    if (ncol - 1 >= 0) {
+    //Check left neighbour
+    if (currGen[nrow][ncol + 1] == 1)
+        count++
+    }
+
+    //Ensure not on bottom left corner
+    if (nrow + 1 < rows && ncol - 1 >= 0) {
+    //Check bottom left neighbour
+    if (currGen[nrow + 1][ncol - 1] == 1)
+        count++
+    }
+
+    //Ensure not on last row
+    if (nrow + 1 < rows) {
+    //Check bottom neighbour
+    if (currGen[nrow + 1[ncol] == 1])
+    count++
+    }
+    return count
+}
+
+//Loop through each cell and get neighbour count.
+//Determine if cell stays alive, comes alive, stays dead, or dies. 
+
+function createNextGen() {
+    for (row in currGen) {
+        for (col in currGen[row]) {
+            let neighbours = getNeighbourCount(row, col)
+
+            //Check the rules!!!!
+            //If cell is ALIVE, aka 1 and...: 
+            if (currGen[row][col] == 1) {
+                if (neighbours < 2) {
+                    nextGen[row][col] = 0 //... cell has less than 2 neighbours, it dies.
+                } else if (neighbours == 2 || neighbours == 3) {
+                    nextGen[row][col] = 1 //... cell has 2 or 3 neighbours, it lives.
+                } else if (neighbour > 3) {
+                    nextGen[row][col] = 0 //... cell has more than 3 neighbours, it dies.
+                }
+            //If cell is DEAD, aka 0, birth a new cell
+            } else if (currGen[row][col] == 0) {
+                if (neighbours == 3) {
+                    nextGen[row][col] = 1 
+                }
+
+            }
+        }
+    }
+}
+
 window.onload=()=>{
     createWorld() //The visual table of a 2D array
     createGenArrays() //current and next gen
@@ -82,3 +155,4 @@ window.onload=()=>{
 }
 
 //draw this out
+
