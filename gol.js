@@ -1,5 +1,32 @@
-//create rows and columns
+//I created this board with the great guide from Medium.com to assit my JS learning journey
+//https://medium.com/javascript-in-plain-english/the-game-of-life-using-javascript-fc1aaec8274f
 
+
+//Create elements of button features
+let started=false //Set to true when user clicks 'start'
+let timer  // Controls Evolutions
+let evolutionSpeed=750 //One second between generations
+
+
+//create function attached to html button features to start/stop Evoution.
+function startStopGol() {
+    let startstop=document.querySelector('#btnstartstop')
+
+    if (!started) {
+        started = true
+        startstop.value="Stop Evolution"
+        evolve()
+    } else {
+        started = false
+        startstop.value="Start Evolution"
+        clearTimeout(timer)
+    }
+}
+
+function resetWorld() {
+    location.reload()
+}
+//create rows and columns
 const rows = 40
 const cols = 40
 
@@ -73,7 +100,6 @@ function cellClick() {
         currGen[row][col] = 1 //Value of 1 is alive
     }
 }
-
 
 //Ensure we are never looking out of bounds, aka, a negative number as a cell position.
 //Current row and column will never be less than 0.
@@ -199,6 +225,10 @@ function evolve() {
     createNextGen()
     updateCurrGen()
     updateWorld()
+    //added code to react to startstop button features
+    if (started) {
+        timer = setTimeout(evolve, evolutionSpeed)
+    }
 }
 
 //draw this out

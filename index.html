@@ -8,12 +8,43 @@
         <!--Our Style Sheet-->
         <link rel="stylesheet" href='gol.css'>
     </head>
+    <header>
+        <h1>
+            Conway's Game of Life
+        </h1>
+    </header>
     <body>
+        <h2>The rules:</h2>
+    <ul>
+        <li>
+            Any live cell with two or three live neighbours survives.
+        </li>
+        <li>
+            Any dead cell with three live neighbours becomes live.
+        </li>
+        <li>
+            All other live cells die in the next generation. 
+        </li>
+    </ul>
+    <br>
+ <h3>Click the Start/Stop Evolution Button to control the propgation of cells.</h3>
+ <Input type='button' id='btnstartstop' value='Start Reproducing' onclick='startStopGol();'/>
+ <Input type='button' id='btnreset' value='Reset World' onclick='resetWorld();'/>
+
+    <!-- This is a button for temporary evolution, testing passed -->
+    <!-- <input type='button' value='Evolve' onclick='evolve()'.> -->
+    <!-- <input type="button" id="btnstartstop" value ="Start Evolution"/>
+    <!--<input type="button" id="btnreset" value ="Reset Evolution"/>-->
+ <br>
+ <br>
         <div id="world">
 
         </div>
+        <br>
+        <br>
         <div>
-            <input type='button' value='Evolve' onclick='evolve()'.>
+
+ 
         </div>
         <!--JavaScript-->
         <script 
