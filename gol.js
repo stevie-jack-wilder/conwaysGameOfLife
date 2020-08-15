@@ -148,6 +148,34 @@ function createNextGen() {
     }
 }
 
+//Update the currGen with result of createNextGen
+//Set nextGen to 0
+function updateCurrGen() {
+    for (row in currGen) {
+        currGen[row][col] = nextGen[row][col]
+        nextGen[row][col] = 0
+    }
+}
+
+//Update the visual display of the world.
+function updateWorld() {
+    let cell=''
+    for (row in currGen) {
+        for (col in currGen[row]) {
+            cell = document.getElementById(row + '_' + col)
+            if (currGen[row][col] === 0) {
+                cell.setAttribute('class', 'dead')
+            } else {
+                cell.setAttribute('class', 'alive')
+            }
+        }
+    }
+}
+
+
+
+
+
 window.onload=()=>{
     createWorld() //The visual table of a 2D array
     createGenArrays() //current and next gen
