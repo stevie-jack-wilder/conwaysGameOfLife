@@ -3,7 +3,30 @@
 const rows = 40
 const cols = 40
 
-//implement 2D array in function
+//create 1D arrays
+let currGen = [rows]
+let nextGen = [rows]
+
+//create 2D array
+function createGenArrays () {
+    for (let i = 0; i < rows; i++) {
+        currGen[i] = newArray(cols)
+        nextGen[i] = newArray(cols)
+    }
+}
+
+
+//Initially, all cell values are 0 or dead. 1 will be alive. 
+function initGenArrays() {
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            currGen[i][j] = 0;
+            nextGen[i][j] = 0;
+        }
+    }
+}
+
+ //create a board using a 2D array of rows and cols.
 function createWorld() {
 
     //querySelector returns the first element in the document, and matches the specified selector or group of selectors. If no match, null is returned.
@@ -45,13 +68,17 @@ function cellClick() {
     //Toggles cell alive or dead
     if (this.className ==='alive') {
         this.setAttribute('class', 'dead')
+        currGen[row][col] = 0 //Value of 0 is dead
     } else {
         this.setAttribute('class', 'alive')
+        currGen[row][col] = 1 //Value of 1 is alive
     }
 }
 
 window.onload=()=>{
-    createWorld()
+    createWorld() //The visual table of a 2D array
+    createGenArrays() //current and next gen
+    initGenArrays() //Set all array cells to 0 or dead
 }
 
 //draw this out
